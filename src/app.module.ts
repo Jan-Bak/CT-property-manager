@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppResolver } from './app.resolver';
+import { PropertiesModule } from './modules/properties/properties.module';
 
 @Module({
   imports: [
@@ -16,7 +14,7 @@ import { AppResolver } from './app.resolver';
     MongooseModule.forRoot(
       process.env.MONGODB_URI || 'mongodb://localhost:27017/property-manager',
     ),
+    PropertiesModule,
   ],
-  providers: [AppResolver],
 })
 export class AppModule {}
