@@ -27,9 +27,9 @@ export class PropertyModel {
   @Field(() => WeatherData, { nullable: true })
   weatherData?: WeatherData;
 
-  @Field(() => Float)
-  lat: number;
+  @Field(() => Float, { nullable: true })
+  lat?: number;
 
-  @Field(() => Float)
-  long: number;
+  @Field(() => Float, { nullable: true })
+  long?: number;
 }

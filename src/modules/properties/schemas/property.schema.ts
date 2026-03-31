@@ -1,8 +1,9 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
 export type PropertyDocument = HydratedDocument<Property>;
 
+@Schema()
 export class Property {
   @Prop({ required: true })
   city: string;
@@ -16,14 +17,14 @@ export class Property {
   @Prop({ required: true, length: 5, match: /^\d{5}$/ })
   zipCode: string;
 
-  @Prop({ required: true, type: Object })
-  weatherData: Record<string, any>;
+  @Prop({ type: Object })
+  weatherData?: Record<string, any>;
 
-  @Prop({ required: true, type: Number })
-  lat: number;
+  @Prop({ type: Number })
+  lat?: number;
 
-  @Prop({ required: true, type: Number })
-  long: number;
+  @Prop({ type: Number })
+  long?: number;
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);
