@@ -12,6 +12,15 @@ export class PropertiesResolver {
     return this.propertiesService.findAll();
   }
 
+  @Query(() => [PropertyModel])
+  async propertiesByFilters(
+    @Args('city', { nullable: true }) city?: string,
+    @Args('state', { nullable: true }) state?: string,
+    @Args('zipCode', { nullable: true }) zipCode?: string,
+  ): Promise<PropertyModel[]> {
+    return this.propertiesService.findByFilters(city, state, zipCode);
+  }
+
   @Mutation(() => PropertyModel)
   async createProperty(
     @Args('input')
