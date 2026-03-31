@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Property, PropertyDocument } from './schemas/property.schema';
 import { Model } from 'mongoose';
 import { CreatePropertyDto } from './dto/createProperty.dto';
+import { WeatherStackService } from '../weatherStack/weatherStack.service';
 
 @Injectable()
 export class PropertiesService {
   constructor(
     @InjectModel(Property.name) private propertyModel: Model<PropertyDocument>,
+    private readonly weatherStackService: WeatherStackService,
   ) {}
 
   async findAll(): Promise<PropertyDocument[]> {
@@ -34,7 +36,20 @@ export class PropertiesService {
   }
 
   async create(data: CreatePropertyDto): Promise<PropertyDocument> {
-    const createdProperty = new this.propertyModel(data);
+    const weatherData = await this.weatherStackService.findWeatherData(
+      data.city,
+      data.state,
+      data.zipCode,
+    );
+
+    const propertyData = {
+      ...data,
+      weatherData: weatherData.current,
+      lat: parseFloat(weatherData.lat),
+      long: parseFloat(weatherData.long),
+    };
+
+    const createdProperty = new this.propertyModel(propertyData);
     return await createdProperty.save();
   }
 

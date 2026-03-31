@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { type WeatherStackCurrent } from 'src/modules/weatherStack/weatherStack.type';
 
 export type PropertyDocument = HydratedDocument<Property>;
 
@@ -18,7 +19,7 @@ export class Property {
   zipCode: string;
 
   @Prop({ type: Object })
-  weatherData?: Record<string, any>;
+  weatherData?: WeatherStackCurrent;
 
   @Prop({ type: Number })
   lat?: number;
