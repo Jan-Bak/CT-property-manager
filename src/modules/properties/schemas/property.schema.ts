@@ -4,7 +4,7 @@ import { type WeatherStackCurrent } from 'src/modules/weatherStack/weatherStack.
 
 export type PropertyDocument = HydratedDocument<Property>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Property {
   @Prop({ required: true })
   city: string;
@@ -19,13 +19,13 @@ export class Property {
   zipCode: string;
 
   @Prop({ type: Object })
-  weatherData?: WeatherStackCurrent;
+  weatherData: WeatherStackCurrent;
 
   @Prop({ type: Number })
-  lat?: number;
+  lat: number;
 
   @Prop({ type: Number })
-  long?: number;
+  long: number;
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);

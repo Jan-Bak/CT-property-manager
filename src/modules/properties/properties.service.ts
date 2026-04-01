@@ -12,8 +12,25 @@ export class PropertiesService {
     private readonly weatherStackService: WeatherStackService,
   ) {}
 
-  async findAll(): Promise<PropertyDocument[]> {
-    return await this.propertyModel.find().exec();
+  async findAll(
+    city?: string,
+    state?: string,
+    zipCode?: string,
+    sortBy?: 'desc' | 'asc',
+  ): Promise<PropertyDocument[]> {
+    const filters: Record<string, any> = {};
+    if (city) filters.city = city;
+    if (state) filters.state = state;
+    if (zipCode) filters.zipCode = zipCode;
+
+    let query = this.propertyModel.find(filters);
+
+    if (sortBy) {
+      const sortOrder = sortBy === 'asc' ? 1 : -1;
+      query = query.sort({ createdAt: sortOrder });
+    }
+
+    return await query.exec();
   }
 
   async findById(id: string): Promise<PropertyDocument | null> {
@@ -22,20 +39,21 @@ export class PropertiesService {
 
   //Maybe filters should be avaiable to findAll method instead of creating new one?
   //TODO: Add lat and long
-  async findByFilters(
-    city?: string,
-    state?: string,
-    zipCode?: string,
-  ): Promise<PropertyDocument[]> {
-    const filters: Record<string, any> = {};
-    if (city) filters.city = city;
-    if (state) filters.state = state;
-    if (zipCode) filters.zipCode = zipCode;
+  // async findByFilters(
+  //   city?: string,
+  //   state?: string,
+  //   zipCode?: string,
+  // ): Promise<PropertyDocument[]> {
+  //   const filters: Record<string, any> = {};
+  //   if (city) filters.city = city;
+  //   if (state) filters.state = state;
+  //   if (zipCode) filters.zipCode = zipCode;
 
-    return await this.propertyModel.find(filters).exec();
-  }
+  //   return await this.propertyModel.find(filters).exec();
+  // }
 
   async create(data: CreatePropertyDto): Promise<PropertyDocument> {
+    // rethink this if i should put this call here instead of in resolver
     const weatherData = await this.weatherStackService.findWeatherData(
       data.city,
       data.state,

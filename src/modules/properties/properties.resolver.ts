@@ -8,17 +8,13 @@ export class PropertiesResolver {
   constructor(private propertiesService: PropertiesService) {}
 
   @Query(() => [PropertyModel])
-  async properties(): Promise<PropertyModel[]> {
-    return this.propertiesService.findAll();
-  }
-
-  @Query(() => [PropertyModel])
-  async propertiesByFilters(
+  async properties(
     @Args('city', { nullable: true }) city?: string,
     @Args('state', { nullable: true }) state?: string,
     @Args('zipCode', { nullable: true }) zipCode?: string,
+    @Args('sortBy', { nullable: true }) sortBy?: 'desc' | 'asc', //TODO: enum?  | its sorted by createdAt field
   ): Promise<PropertyModel[]> {
-    return this.propertiesService.findByFilters(city, state, zipCode);
+    return this.propertiesService.findAll(city, state, zipCode, sortBy);
   }
 
   @Mutation(() => PropertyModel)
