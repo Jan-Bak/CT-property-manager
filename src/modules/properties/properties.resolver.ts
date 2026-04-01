@@ -18,7 +18,7 @@ export class PropertiesResolver {
     @Args('sortBy', { nullable: true, type: () => SortOrder })
     sortBy?: SortOrder,
   ): Promise<PropertyModel[]> {
-    if (city || state || zipCode || sortBy) {
+    if (city || state || zipCode || lat || long || sortBy) {
       return this.propertiesService.findWithFilters(
         city,
         state,
@@ -30,6 +30,11 @@ export class PropertiesResolver {
     }
 
     return this.propertiesService.findAll();
+  }
+
+  @Query(() => PropertyModel, { nullable: true })
+  async property(@Args('id') id: string): Promise<PropertyModel | null> {
+    return this.propertiesService.findById(id);
   }
 
   @Mutation(() => PropertyModel)

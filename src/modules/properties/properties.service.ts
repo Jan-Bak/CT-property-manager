@@ -25,12 +25,11 @@ export class PropertiesService {
     long?: number,
     sortBy: SortOrder = SortOrder.DESC,
   ): Promise<PropertyDocument[]> {
-    const filters: Record<string, string | number> = {};
-    if (city) filters.city = city;
-    if (state) filters.state = state;
-    if (zipCode) filters.zipCode = zipCode;
-    if (lat) filters.lat = lat;
-    if (long) filters.long = long;
+    const filters = Object.fromEntries(
+      Object.entries({ city, state, zipCode, lat, long }).filter(
+        ([, value]) => value !== undefined,
+      ),
+    ) as Record<string, string | number>;
 
     return await this.propertyModel
       .find(filters)
