@@ -1,5 +1,5 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { WeatherData } from 'src/modules/weatherStack/weatherStack.model';
+import { WeatherData } from 'src/modules/weatherStack/model/weatherStack.model';
 
 @ObjectType()
 export class PropertyModel {
@@ -18,12 +18,15 @@ export class PropertyModel {
   @Field(() => String)
   zipCode: string;
 
-  @Field(() => WeatherData, { nullable: true })
-  weatherData?: WeatherData;
+  @Field(() => WeatherData)
+  weatherData: WeatherData;
 
-  @Field(() => Float, { nullable: true })
-  lat?: number;
+  @Field(() => Float)
+  lat: number;
 
-  @Field(() => Float, { nullable: true })
-  long?: number;
+  @Field(() => Float)
+  long: number;
+
+  @Field(() => Date)
+  createdAt: Date;
 }

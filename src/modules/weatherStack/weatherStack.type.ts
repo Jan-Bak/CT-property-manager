@@ -64,3 +64,12 @@ export interface WeatherStackResponse {
   location: WeatherStackLocation;
   current: WeatherStackCurrent;
 }
+
+export interface WeatherStackErrorResponse {
+  success: boolean;
+  error: {
+    code: number;
+    type: string;
+    info: string;
+  };
+}

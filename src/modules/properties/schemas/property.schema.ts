@@ -26,6 +26,9 @@ export class Property {
 
   @Prop({ type: Number })
   long: number;
+
+  @Prop({ type: Date })
+  createdAt: Date;
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);
