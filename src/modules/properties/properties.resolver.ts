@@ -13,6 +13,8 @@ export class PropertiesResolver {
     @Args('city', { nullable: true }) city?: string,
     @Args('state', { nullable: true }) state?: string,
     @Args('zipCode', { nullable: true }) zipCode?: string,
+    @Args('lat', { nullable: true }) lat?: number,
+    @Args('long', { nullable: true }) long?: number,
     @Args('sortBy', { nullable: true, type: () => SortOrder })
     sortBy?: SortOrder,
   ): Promise<PropertyModel[]> {
@@ -21,6 +23,8 @@ export class PropertiesResolver {
         city,
         state,
         zipCode,
+        lat,
+        long,
         sortBy,
       );
     }

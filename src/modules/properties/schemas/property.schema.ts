@@ -18,13 +18,13 @@ export class Property {
   @Prop({ required: true, length: 5, match: /^\d{5}$/ })
   zipCode: string;
 
-  @Prop({ type: Object })
+  @Prop({ required: true, type: Object })
   weatherData: WeatherStackCurrent;
 
-  @Prop({ type: Number })
+  @Prop({ required: true, type: Number })
   lat: number;
 
-  @Prop({ type: Number })
+  @Prop({ required: true, type: Number })
   long: number;
 
   @Prop({ type: Date })
