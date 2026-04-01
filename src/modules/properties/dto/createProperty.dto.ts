@@ -22,7 +22,9 @@ export class CreatePropertyDto {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
-  @Length(2, 2)
+  @Length(2, 2, {
+    message: 'State must be exactly 2 characters (e.g., CA, NY)',
+  })
   state: string;
 
   @Field(() => String)

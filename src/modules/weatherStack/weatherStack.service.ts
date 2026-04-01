@@ -1,7 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { WeatherStackResponse } from './weatherStack.type';
-import { firstValueFrom, Observable } from 'rxjs';
+import {
+  WeatherStackCurrent,
+  WeatherStackErrorResponse,
+  WeatherStackResponse,
+} from './weatherStack.type';
+import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -27,31 +31,38 @@ export class WeatherStackService {
     state: string,
     zipCode: string,
   ): Promise<{
-    current: WeatherStackResponse['current'];
+    current: WeatherStackCurrent;
     lat: string;
     long: string;
   }> {
     const query = `${city},${state},${zipCode}`;
 
-    const url = new URL(this.apiUrl);
-    url.searchParams.append('access_key', this.apiKey);
-    url.searchParams.append('query', query);
+    try {
+      const { data } = await firstValueFrom(
+        this.httpService.get<WeatherStackResponse | WeatherStackErrorResponse>(
+          this.apiUrl,
+          {
+            params: {
+              access_key: this.apiKey,
+              query: query,
+            },
+          },
+        ),
+      );
 
-    const response = await firstValueFrom(
-      this.httpService.get<WeatherStackResponse>(this.apiUrl, {
-        params: {
-          access_key: this.apiKey,
-          query: query,
-        },
-      }),
-    ).catch((error) => {
-      console.error('Error fetching weather data:', error);
-      throw new Error('Failed to fetch weather data');
-    });
+      if ('error' in data) {
+        const { error } = data;
+        throw new Error(
+          `WeatherStack API Error (${error.code}): ${error.type} - ${error.info}`,
+        );
+      }
 
-    const { current, location } = response.data;
-    const { lat, lon: long } = location;
+      const { current, location } = data;
+      const { lat, lon: long } = location;
 
-    return { current, lat, long };
+      return { current, lat, long };
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -39,22 +39,31 @@ export class PropertiesService {
 
   async create(data: CreatePropertyDto): Promise<PropertyDocument> {
     // rethink this if i should put this call here instead of in resolver
-    const weatherData = await this.weatherStackService
-      .findWeatherData(data.city, data.state, data.zipCode)
-      .catch((error) => {
-        console.error('Error fetching weather data:', error);
-        throw new Error('Failed to fetch weather data');
-      });
 
-    const propertyData = {
-      ...data,
-      weatherData: weatherData.current,
-      lat: parseFloat(weatherData.lat),
-      long: parseFloat(weatherData.long),
-    };
+    try {
+      const weatherData = await this.weatherStackService.findWeatherData(
+        data.city,
+        data.state,
+        data.zipCode,
+      );
 
-    const createdProperty = new this.propertyModel(propertyData);
-    return await createdProperty.save();
+      const propertyData = {
+        ...data,
+        weatherData: weatherData.current,
+        lat: parseFloat(weatherData.lat),
+        long: parseFloat(weatherData.long),
+      };
+
+      const createdProperty = new this.propertyModel(propertyData);
+
+      return await createdProperty.save();
+    } catch (error) {
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : 'An unknown error occurred while fetching weather data',
+      );
+    }
   }
 
   async delete(id: string): Promise<Boolean> {
