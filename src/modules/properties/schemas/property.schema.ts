@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { type WeatherStackCurrent } from 'src/modules/weatherStack/weatherStack.type';
+import { type WeatherStackCurrent } from 'src/modules/weatherStack/types/weatherStack.type';
 
 export type PropertyDocument = HydratedDocument<Property>;
 

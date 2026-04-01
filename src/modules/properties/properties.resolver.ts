@@ -1,7 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PropertyModel } from './model/property.model';
+import { PropertyModel } from './models/property.model';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/createProperty.dto';
+import { SortOrder } from './enums/sort-order.enum';
 
 @Resolver(() => PropertyModel)
 export class PropertiesResolver {
@@ -12,9 +13,19 @@ export class PropertiesResolver {
     @Args('city', { nullable: true }) city?: string,
     @Args('state', { nullable: true }) state?: string,
     @Args('zipCode', { nullable: true }) zipCode?: string,
-    @Args('sortBy', { nullable: true }) sortBy?: 'desc' | 'asc', //TODO: enum?  | its sorted by createdAt field
+    @Args('sortBy', { nullable: true, type: () => SortOrder })
+    sortBy?: SortOrder,
   ): Promise<PropertyModel[]> {
-    return this.propertiesService.findAll(city, state, zipCode, sortBy);
+    if (city || state || zipCode || sortBy) {
+      return this.propertiesService.findWithFilters(
+        city,
+        state,
+        zipCode,
+        sortBy,
+      );
+    }
+
+    return this.propertiesService.findAll();
   }
 
   @Mutation(() => PropertyModel)
@@ -22,7 +33,6 @@ export class PropertiesResolver {
     @Args('input')
     input: CreatePropertyDto,
   ): Promise<PropertyModel> {
-    //TODO: request to weather api
     return this.propertiesService.create(input);
   }
 

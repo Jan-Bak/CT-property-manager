@@ -4,7 +4,7 @@ import {
   WeatherStackCurrent,
   WeatherStackErrorResponse,
   WeatherStackResponse,
-} from './weatherStack.type';
+} from './types/weatherStack.type';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 
@@ -57,8 +57,10 @@ export class WeatherStackService {
         );
       }
 
-      const { current, location } = data;
-      const { lat, lon: long } = location;
+      const {
+        current,
+        location: { lat, lon: long },
+      } = data;
 
       return { current, lat, long };
     } catch (error) {

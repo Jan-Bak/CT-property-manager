@@ -1,5 +1,5 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { WeatherData } from 'src/modules/weatherStack/model/weatherStack.model';
+import { WeatherData } from 'src/modules/weatherStack/models/weatherStack.model';
 
 @ObjectType()
 export class PropertyModel {
