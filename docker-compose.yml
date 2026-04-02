@@ -1,6 +1,18 @@
-version: '3.8'
-
 services:
+  app:
+    build: .
+    container_name: property-manager-api
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      MONGODB_URI: ${MONGODB_URI}
+      WEATHERSTACK_API_KEY: ${WEATHERSTACK_API_KEY}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
   mongo:
     image: mongo:7.0
     container_name: property-manager-mongodb
@@ -11,6 +23,11 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo-data:

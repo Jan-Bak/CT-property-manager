@@ -2,28 +2,55 @@
 
 ### Stack
 
-- NestJS
-- GraphQL
-- MongoDB
-- Docker
+- **NestJS** - Backend framework
+- **GraphQL** - API Layer
+- **MongoDB** - Database
+- **Docker** - Containerization
+- **Node.js** - v24
 
-### How to run the project
+### Prerequisites
 
-Create `.env` file with the following content:
+- Node.js v24
+- Docker & Docker Compose
+- npm
 
+### Setup & Installation
+
+**Create a `.env` file** with the following variables:
+
+```env
+PORT=3000
+MONGODB_URI=mongodb://admin:password@mongo:27017/property-manager?authSource=admin
+WEATHERSTACK_API_KEY=your_weatherstack_api_key_here
 ```
-  PORT=3000
-  MONGODB_URI=your_mongodb_uri # e.g. mongodb://admin:password@localhost:27017/property-manager?authSource=admin
-  WEATHERSTACK_API_KEY=your_weatherstack_api_key
-```
 
-Then run the following command to install dependencies and start the server:
+### How to Run
+
+#### Option 1: Using Docker (Recommended)
+
+Start all services (NestJS app + MongoDB) in one command:
 
 ```bash
-  docker-compose up -d
-  npm install
-  npm run start:dev
+docker-compose up -d
 ```
+
+The app will be available at `http://localhost:3000/graphql`
+
+#### Option 2: Local Development
+
+1. **Install dependencies:**
+
+```bash
+npm install
+```
+
+2. **Start the development server:**
+
+```bash
+npm run start:dev
+```
+
+Remember to change the `MONGODB_URI` in your `.env` file to point to your local MongoDB instance if you're running it outside of Docker.
 
 ### Example queries related with user stories:
 
